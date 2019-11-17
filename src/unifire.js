@@ -47,17 +47,15 @@ export default class Unifire {
       : val;
   }
 
-  _getHandler = () => {
-    return {
-      get (state, prop) {
-        return self._compute(state, prop);
-      },
-      set (state, prop, next) {
-        const prev = state[prop];
-        state[prop] = next;
-        this._watch({ state, prop, next, prev });
-        return true;
-      }
+  _getHandler = () => ({
+    get (state, prop) {
+      return self._compute(state, prop);
+    },
+    set (state, prop, next) {
+      const prev = state[prop];
+      state[prop] = next;
+      this._watch({ state, prop, next, prev });
+      return true;
     }
-  }
+  })
 };
