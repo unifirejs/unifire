@@ -1,4 +1,4 @@
-export class Unifire {
+export default class Unifire {
   constructor ({ state = {}, watch = {}, actions = {} }) {
     this._WATCHERS = watch;
     this._ACTIONS = actions;
@@ -27,7 +27,6 @@ export class Unifire {
   _set = (delta, cb) => {
     const before = Object.assign({}, this.state);
     Object.assign(this.state, delta);
-    const changedKeys = [];
     const changedKeys = Object.keys(before).filter(key => before[key] !== this.state[key]);
     this._SUBSCRIBERS.forEach(sub => sub(changedKeys, before, this.state));
     if(cb) cb();
