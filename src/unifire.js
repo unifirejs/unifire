@@ -4,6 +4,7 @@ export class Unifire {
     this._ACTIONS = actions;
     this._SUBSCRIBERS = [];
     this.state = new Proxy({}, this._getHandler());
+    state = this._getReturnValue(state);
     Object.assign(this.state, state);
   }
 
@@ -12,13 +13,13 @@ export class Unifire {
     return () => this._SUBSCRIBERS = this._SUBSCRIBERS.filter(sub => sub !== cb);
   }
 
-  dispatch = (actionName, payload) => {
+  fire = (actionName, payload) => {
     const action = this._ACTIONS[actionName];
     if (!action) return;
     const context = {
       set: this._set,
       state: this.state,
-      dispatch: this.dispatch
+      fire: this.fire
     };
     action(context, payload);
   }
@@ -26,23 +27,14 @@ export class Unifire {
   _set = (delta, cb) => {
     const before = Object.assign({}, this.state);
     Object.assign(this.state, delta);
-
     const changedKeys = [];
-    for (const key in before) {
-      if(before[key] !== this.state[key]){
-        changedKeys.push(key);
-      }
-    }
+    const changedKeys = Object.keys(before).filter(key => before[key] !== this.state[key]);
     this._SUBSCRIBERS.forEach(sub => sub(changedKeys, before, this.state));
-
     if(cb) cb();
   }
 
   _compute (state, prop) {
-    const output = state[prop];
-    return typeof output === 'function'
-      ? output(state)
-      : output;
+    return this._getReturnValue(state[prop], state);
   }
 
   _watch ({ state, prop, next, prev }) {
@@ -50,8 +42,13 @@ export class Unifire {
     if (watcher) watcher({ prev, next, state });
   }
 
-  _getHandler () {
-    const self = this;
+  _getReturnValue (val, arg) {
+    return typeof val === 'function'
+      ? val.call(null, arg)
+      : val;
+  }
+
+  _getHandler = () => {
     return {
       get (state, prop) {
         return self._compute(state, prop);
@@ -59,7 +56,7 @@ export class Unifire {
       set (state, prop, next) {
         const prev = state[prop];
         state[prop] = next;
-        self._watch({ state, prop, next, prev });
+        this._watch({ state, prop, next, prev });
         return true;
       }
     }
