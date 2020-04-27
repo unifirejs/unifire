@@ -27,10 +27,8 @@ export const Unifire = (config) => {
         return STATE[prop];
       }
     }), {});
-    // These should both use optional chaining. Support is nearly complete.
-    // https://caniuse.com/#feat=mdn-javascript_operators_optional_chaining
-    DEPS.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].add(override || cb));
-    return () => DEPS.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].delete(override || cb));
+    DEPS.forEach((dep) => SUBSCRIPTIONS[dep]?.add(override || cb));
+    return () => DEPS.forEach((dep) => SUBSCRIPTIONS[dep]?.delete(override || cb));
   }
 
   const fire = (actionName, payload) => {

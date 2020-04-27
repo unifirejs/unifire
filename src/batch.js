@@ -13,7 +13,7 @@ export const Unifire = (config) => {
       if (!isFunc(current) && current !== next) {
         const prior = deref(STATE);
         state[prop] = next;
-        SUBSCRIPTIONS[prop] && SUBSCRIPTIONS[prop].forEach((sub) => sub(STATE, { prior }));
+        SUBSCRIPTIONS[prop]?.forEach((sub) => sub(STATE, { prior }));
       }
       return true;
     }
@@ -35,17 +35,15 @@ export const Unifire = (config) => {
   const subscribe = (cb, override) => {
     DEPS.clear();
     cb(getDepProxy(deref(STATE), true), {});
-    // These should both use optional chaining. Support is nearly complete.
-    // https://caniuse.com/#feat=mdn-javascript_operators_optional_chaining
-    DEPS.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].add(override || cb));
-    return () => DEPS.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].delete(override || cb));
+    DEPS.forEach((dep) => SUBSCRIPTIONS[dep]?.add(override || cb));
+    return () => DEPS.forEach((dep) => SUBSCRIPTIONS[dep]?.delete(override || cb));
   }
 
   const callUniqueSubscribers = (delta) => {
     const changedProps = Object.keys(delta).filter((prop) => delta[prop] !== STATE[prop]);
     const uniqueSubscribers = new Set();
     for (const prop of changedProps) {
-      SUBSCRIPTIONS[prop] && SUBSCRIPTIONS[prop].forEach((sub) => uniqueSubscribers.add(sub));
+      SUBSCRIPTIONS[prop]?.forEach((sub) => uniqueSubscribers.add(sub));
     }
     const prior = deref(STATE);
     deref(delta, BARE_STATE);

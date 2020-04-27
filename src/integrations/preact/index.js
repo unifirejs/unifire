@@ -9,10 +9,7 @@ export function Observer (component) {
   function Wrapper(_, { store }) {
     let unsubscribe;
     this.componentDidMount = () => {
-      unsubscribe = store.subscribe(component, () => {
-        console.log('OBSERVER');
-        this.setState({});
-      });
+      unsubscribe = store.subscribe(component, () => this.setState({}));
     };
     this.componentWillUnmount = () => unsubscribe();
     this.render = () => h(component, { ...store.state, fire: store.fire });
