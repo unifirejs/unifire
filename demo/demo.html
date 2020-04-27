@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <script src="../src/batch.js"></script>
+    <script>
+      // Initialize your state and computed properties
+      const state = {
+        one: 1,
+        two: 2,
+        three: ({ one, two }) => one + two,
+
+        // Computed properties can depend on other computer properties
+        // All functions in the state object are treated as computed properties
+        four: ({ three }) => three * 2
+      };
+
+      // Actions can do some cool stuff
+      const actions = {
+        // You can do the basic stuff you're used to
+        incrementOne: ({ state }) => state.one++,
+
+        // Including passing a custom argument
+        incrementCustom: ({ state }, prop) => state[prop]++,
+
+        // Async actions are first-class citizens
+        incrementOneAsync: async ({ state }) => {
+          await Promise.resolve();
+          state.one++;
+        },
+
+        // Composing async actions is extremely easy
+        incrementComposed: async ({ state, fire }) => {
+          await fire('incrementOneAsync');
+          state.two++;
+        }
+      }
+
+      // Create your Store instance
+      const store = Unifire({ state, actions });
+
+      // You can read/write directly on your store to trigger reactive updates
+      store.state.one = 2;
+
+      // If an assignment doesn't change anything, no reactions will happen
+      store.state.one = 2;
+
+      // You can subscribe to any values you initialized in your state object including computed properties
+      // This subscriber will run every time any property used to compute store.state.four changes
+      store.subscribe(({ four }) => console.log('FOUR', four));
+
+      // The subscribe method returns an unsubscribe method
+      const unsubscribe = store.subscribe(({ one }) => {});
+      unsubscribe();
+
+      // You can subscribe to as many top-level state keys as you want
+      store.subscribe(({ one, two }) => console.log('ONE', one, 'TWO', two));
+
+      // Subscribe methods receive an optional second argument containing info about the changed state prop
+      // You can use this object to check the prior value of the state prop to which you've subscribed
+      store.subscribe(({ two }, { prior }) => console.log('WATCH', two, prior));
+
+      // For multi-property subscriptions, you can check which prop triggered your subscriber
+      store.subscribe(({ one, two }, { prop, prior }) => console.log('WATCH', one, two, prop, prior));
+
+      // You can fire actions with a custom argument and await async actions
+      store.fire('incrementOne');
+      store.fire('incrementCustom', 'two');
+      store.fire('incrementOneAsync').then(console.log('ASYNC ACTION COMPLETE'));
+
+      // You can register additional state and actions at runtime allowing you to code split your store into modules
+      const lazyLoadedStoreModule = {
+        state: { lazy: false },
+        actions: { toggleLazy: ({ state }) => state.lazy = !state.lazy }
+      };
+      store.register(lazyLoadedStoreModule);
+    </script>
+  </head>
+  <body>
+    <h1>Open dev tools and have some fun!</h1>
+  </body>
+</html>

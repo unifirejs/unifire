@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <script src="../src/batch.js"></script>
+    <script>
+      const state = { count: 0 };
+
+      const actions = {
+        increment: ({ state }) => state.count++,
+        decrement: ({ state }) => state.count--
+      }
+
+      const store = Unifire({ state, actions });
+
+      store.subscribe(({ count }) => console.log('count', count));
+    </script>
+  </head>
+  <body>
+    <h1>Open dev tools and have some fun!</h1>
+  </body>
+</html>
