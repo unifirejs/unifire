@@ -54,12 +54,8 @@
       // You can subscribe to as many top-level state keys as you want
       store.subscribe(({ one, two }) => console.log('ONE', one, 'TWO', two));
 
-      // Subscribe methods receive an optional second argument containing info about the changed state prop
-      // You can use this object to check the prior value of the state prop to which you've subscribed
+      // Subscribe methods receive an optional second argument containing a snapshot of the state prior to the applicable change
       store.subscribe(({ two }, { prior }) => console.log('WATCH', two, prior));
-
-      // For multi-property subscriptions, you can check which prop triggered your subscriber
-      store.subscribe(({ one, two }, { prop, prior }) => console.log('WATCH', one, two, prop, prior));
 
       // You can fire actions with a custom argument and await async actions
       store.fire('incrementOne');

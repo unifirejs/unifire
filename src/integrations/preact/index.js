@@ -12,6 +12,7 @@ export function Observer (component) {
       unsubscribe = store.subscribe(component, () => this.setState({}));
     };
     this.componentWillUnmount = () => unsubscribe();
+    // STILL NEED TO ENSURE I PASS DOWN PROPS FROM PARENT COMPONENTS
     this.render = () => h(component, { ...store.state, fire: store.fire });
   }
   return (Wrapper.prototype = new Component()).constructor = Wrapper;

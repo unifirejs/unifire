@@ -13,7 +13,7 @@ export const Unifire = (config) => {
       if (!isFunc(current) && current !== next) {
         const prior = deref(STATE);
         state[prop] = next;
-        SUBSCRIPTIONS[prop]?.forEach((sub) => sub(STATE, { prior }));
+        SUBSCRIPTIONS[prop].forEach((sub) => sub(STATE, { prior }));
       }
       return true;
     }
@@ -25,9 +25,9 @@ export const Unifire = (config) => {
 
   const getDepProxy = (obj, addToDeps) => {
     return new Proxy(obj, {
-      get (_, prop) {
+      get (state, prop) {
         if (addToDeps) DEPS.add(prop);
-        return STATE[prop];
+        return state[prop] || STATE[prop];
       }
     })
   }
@@ -35,31 +35,33 @@ export const Unifire = (config) => {
   const subscribe = (cb, override) => {
     DEPS.clear();
     cb(getDepProxy(deref(STATE), true), {});
-    DEPS.forEach((dep) => SUBSCRIPTIONS[dep]?.add(override || cb));
-    return () => DEPS.forEach((dep) => SUBSCRIPTIONS[dep]?.delete(override || cb));
+    DEPS.forEach((dep) => SUBSCRIPTIONS[dep].add(override || cb));
+    return () => DEPS.forEach((dep) => SUBSCRIPTIONS[dep].delete(override || cb));
   }
 
   const callUniqueSubscribers = (delta) => {
     const changedProps = Object.keys(delta).filter((prop) => delta[prop] !== STATE[prop]);
-    const uniqueSubscribers = new Set();
-    for (const prop of changedProps) {
-      SUBSCRIPTIONS[prop]?.forEach((sub) => uniqueSubscribers.add(sub));
+    if (changedProps.length) {
+      const uniqueSubscribers = new Set();
+      for (const prop of changedProps) {
+        SUBSCRIPTIONS[prop].forEach((sub) => uniqueSubscribers.add(sub));
+      }
+      const prior = deref(STATE);
+      deref(delta, BARE_STATE);
+      uniqueSubscribers.forEach((sub) => sub(STATE, { prior }));
     }
-    const prior = deref(STATE);
-    deref(delta, BARE_STATE);
-    uniqueSubscribers.forEach((sub) => sub(STATE, { prior }));
   }
 
   const fire = async (actionName, payload) => {
     const action = ACTIONS[actionName];
     let output;
     if (action) {
-      let state = deref(STATE);
-      const stateTrap = getDepProxy(state);
+      let state = {};
+      let stateTrap = getDepProxy(state);
       output = ACTIONS[actionName]({ state: stateTrap, fire }, payload);
       callUniqueSubscribers(state);
       if (output && output.then) {
-        state = deref(STATE);
+        for (const prop in state) delete state[prop];
         await output;
         callUniqueSubscribers(state);
       }
