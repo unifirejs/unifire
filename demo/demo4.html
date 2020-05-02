@@ -5,13 +5,12 @@
       const state = { count: 0 };
 
       const actions = {
-        increment: ({ state }) => state.count++,
-        decrement: ({ state }) => state.count--,
-        login: async ({ state }) => {
-          state.loading = true;
+        increment: ({ state, set }) => set({ count: state.count++ }),
+        decrement: ({ state, set }) => set({ count: state.count-- }),
+        login: async ({ state, set }) => {
+          set({ loading: true });
           await login();
-          state.loading = false;
-          state.loggedIn = true;
+          set({ loading: false, loggedIn: true });
         }
       }
 

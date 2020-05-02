@@ -8,13 +8,10 @@ export const Unifire = (config) => {
     get (state, prop) {
       return isFunc(state[prop]) ? state[prop](STATE) : state[prop]
     },
-    set (state, prop, next) {
-      const current = state[prop];
-      if (!isFunc(current) && current !== next) {
-        const prior = deref(STATE);
-        state[prop] = next;
-        SUBSCRIPTIONS[prop].forEach((sub) => sub(STATE, { prior }));
-      }
+    set (/*state, prop, next*/) {
+      // if (!isFunc(state[prop]) && state[prop] !== next) {
+      //   set({ [prop]: next });
+      // }
       return true;
     }
   });
@@ -23,24 +20,22 @@ export const Unifire = (config) => {
 
   const deref = (obj, target = {}) => Object.assign(target, obj);
 
-  const getDepProxy = (obj, addToDeps) => {
-    return new Proxy(obj, {
-      get (state, prop) {
-        if (addToDeps) DEPS.add(prop);
-        return state[prop] || STATE[prop];
-      }
-    })
-  }
-
   const subscribe = (cb, override) => {
     DEPS.clear();
-    cb(getDepProxy(deref(STATE), true), {});
+    cb(new Proxy(obj, {
+      get (_, prop) {
+        DEPS.add(prop);
+        return STATE[prop];
+      }
+    }), {});
     DEPS.forEach((dep) => SUBSCRIPTIONS[dep].add(override || cb));
     return () => DEPS.forEach((dep) => SUBSCRIPTIONS[dep].delete(override || cb));
   }
 
-  const callUniqueSubscribers = (delta) => {
-    const changedProps = Object.keys(delta).filter((prop) => delta[prop] !== STATE[prop]);
+  const set = (delta) => {
+    const changedProps = Object.keys(delta).filter((prop) => {
+      return delta[prop] !== STATE[prop] && !isFunc(BARE_STATE[prop]);
+    });
     if (changedProps.length) {
       const uniqueSubscribers = new Set();
       for (const prop of changedProps) {
@@ -54,19 +49,7 @@ export const Unifire = (config) => {
 
   const fire = async (actionName, payload) => {
     const action = ACTIONS[actionName];
-    let output;
-    if (action) {
-      let state = {};
-      let stateTrap = getDepProxy(state);
-      output = ACTIONS[actionName]({ state: stateTrap, fire }, payload);
-      callUniqueSubscribers(state);
-      if (output && output.then) {
-        for (const prop in state) delete state[prop];
-        await output;
-        callUniqueSubscribers(state);
-      }
-    }
-    return output;
+    return action && action({ state: STATE, set }, payload);
   }
 
   const register = ({ state = {}, actions = {} }) => {
@@ -82,5 +65,5 @@ export const Unifire = (config) => {
 
   register(config);
 
-  return { state: STATE, subscribe, fire, register };
+  return { state: STATE, subscribe, fire, register, set };
 }
