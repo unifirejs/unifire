@@ -1,19 +1,19 @@
-import { h, Component } from 'preact';
+import { h, Component, createContext } from 'preact';
+import { useContext } from 'preact/hooks';
 
-export function Provider (props) {
-	this.getChildContext = () => ({ store: props.store });
-}
-Provider.prototype.render = props => props.children && props.children[0] || props.children;
+const StoreContext = createContext();
+
+export const Provider = StoreContext.Provider;
 
 export function Observer (component) {
-  function Wrapper(_, { store }) {
+  function Wrapper() {
+    const store = useContext(StoreContext);
     let unsubscribe;
     this.componentDidMount = () => {
       unsubscribe = store.subscribe(component, () => this.setState({}));
     };
     this.componentWillUnmount = () => unsubscribe();
-    // STILL NEED TO ENSURE I PASS DOWN PROPS FROM PARENT COMPONENTS
-    this.render = () => h(component, { ...store.state, fire: store.fire });
+    this.render = (props) => h(component, { ...props, ...store.state, fire: store.fire });
   }
   return (Wrapper.prototype = new Component()).constructor = Wrapper;
 }

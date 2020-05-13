@@ -1,12 +1,12 @@
 export default function Unifire (config) {
-  const SUBSCRIPTIONS = {};
-  const ACTIONS = {};
-  const DEPS = new Set();
-  const BARE_STATE = {};
+  let SUBSCRIPTIONS = {};
+  let ACTIONS = {};
+  let DEPS = new Set();
+  let BARE_STATE = {};
   let PENDING_DELTA = {};
   let prior;
 
-  const STATE = new Proxy(BARE_STATE, {
+  let STATE = new Proxy(BARE_STATE, {
     get (state, prop) {
       return isFunc(state[prop]) ? state[prop](STATE) : state[prop]
     },
@@ -19,11 +19,11 @@ export default function Unifire (config) {
     }
   });
 
-  const isFunc = (val) => val instanceof Function;
+  let isFunc = (val) => val instanceof Function;
 
-  const deref = (obj, target = {}) => Object.assign(target, obj);
+  let deref = (obj, target = {}) => Object.assign(target, obj);
 
-  const subscribe = (cb, override) => {
+  let subscribe = (cb, override) => {
     DEPS.clear();
     cb(new Proxy({}, {
       get (_, prop) {
@@ -35,17 +35,17 @@ export default function Unifire (config) {
     return () => DEPS.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].delete(override || cb));
   }
 
-  const debounce = (func) => {
+  let debounce = (func) => {
     let timeout;
     return (...args) => {
       clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply({}, args), 0);
+      timeout = setTimeout(() => func.apply({}, args));
     };
   }
 
-  const callUniqueSubscribers = debounce(() => {
-    const uniqueSubscribers = new Set();
-    for (const prop in PENDING_DELTA) {
+  let callUniqueSubscribers = debounce(() => {
+    let uniqueSubscribers = new Set();
+    for (let prop in PENDING_DELTA) {
       SUBSCRIPTIONS[prop] && SUBSCRIPTIONS[prop].forEach((sub) => uniqueSubscribers.add(sub));
     }
     uniqueSubscribers.forEach((sub) => sub(STATE, prior));
@@ -53,15 +53,15 @@ export default function Unifire (config) {
     prior = deref(STATE);
   })
 
-  const fire = (actionName, payload) => {
+  let fire = (actionName, payload) => {
     return ACTIONS[actionName] && ACTIONS[actionName]({ state: STATE, fire }, payload);
   }
 
-  const register = ({ state = {}, actions = {} }) => {
-    for (const prop in state) SUBSCRIPTIONS[prop] = new Set();
+  let register = ({ state = {}, actions = {} }) => {
+    for (let prop in state) SUBSCRIPTIONS[prop] = new Set();
     deref(actions, ACTIONS);
     deref(state, STATE);
-    for (const prop in state) {
+    for (let prop in state) {
       if (isFunc(state[prop])) {
         subscribe(state[prop], () => SUBSCRIPTIONS[prop].forEach((sub) => sub(STATE, prior)));
       }
