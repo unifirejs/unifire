@@ -1,4 +1,4 @@
-import Unifire from '../src';
+import Unifire from '../';
 
 const tick = () => new Promise((resolve) => setTimeout(resolve));
 
@@ -102,10 +102,26 @@ describe('Unifire', () => {
 	});
 
 	describe('subscribe', () => {
-		it('should execute subscriber immediately', () => {
+		it('should accept an array of state properties and a callback', async () => {
+			const spy = jest.fn();
+			store.subscribe([ 'name', 'loading' ], spy);
+			await tick();
+			expect(spy).toHaveBeenCalledTimes(1);
+			store.state.count++;
+			await tick();
+			expect(spy).toHaveBeenCalledTimes(1);
+			store.state.name = 'jophus';
+			await tick();
+			expect(spy).toHaveBeenCalledTimes(2);
+			store.state.loading = true;
+			await tick();
+			expect(spy).toHaveBeenCalledTimes(3);
+		});
+
+		it('should execute subscriber function immediately', () => {
 			const spy = jest.fn();
 			store.subscribe(spy);
-			expect(spy).toHaveBeenCalled();
+			expect(spy).toHaveBeenCalledTimes(1);
 		});
 
 		it('should not immediately call subscriber on state change', async () => {

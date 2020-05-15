@@ -1,4 +1,4 @@
-export default function Unifire (config) {
+function Unifire (config) {
   const SUBSCRIPTIONS = {};
   const ACTIONS = {};
   const BARE_STATE = {};
@@ -43,21 +43,19 @@ export default function Unifire (config) {
 
   const callUniqueSubscribers = () => {
     // Inlining the debounce function saves a lot of bytes
-    return () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        const uniqueSubscribers = new Set();
-        for (const prop in PENDING_DELTA) {
-          SUBSCRIPTIONS[prop] && SUBSCRIPTIONS[prop].forEach((sub) => uniqueSubscribers.add(sub));
-        }
-        uniqueSubscribers.forEach((sub) => sub(STATE, prior));
-        PENDING_DELTA = {};
-        prior = deref(STATE);
-      });
-    }
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      const uniqueSubscribers = new Set();
+      for (const prop in PENDING_DELTA) {
+        SUBSCRIPTIONS[prop] && SUBSCRIPTIONS[prop].forEach((sub) => uniqueSubscribers.add(sub));
+      }
+      uniqueSubscribers.forEach((sub) => sub(STATE, prior));
+      PENDING_DELTA = {};
+      prior = deref(STATE);
+    });
   }
 
-  const fire = async (actionName, payload) => {
+  const fire = (actionName, payload) => {
     return ACTIONS[actionName] && ACTIONS[actionName]({ state: STATE, fire }, payload);
   }
 
@@ -65,12 +63,12 @@ export default function Unifire (config) {
     for (const prop in state) SUBSCRIPTIONS[prop] = new Set();
     deref(actions, ACTIONS);
     deref(state, STATE);
+    prior = deref(STATE);
     for (const prop in state) {
       if (isFunc(state[prop])) {
-        subscribe(state[prop], () => SUBSCRIPTIONS[prop].forEach((sub) => sub(STATE)));
+        subscribe(state[prop], () => SUBSCRIPTIONS[prop].forEach((sub) => sub(STATE, prior)));
       }
     }
-    prior = deref(STATE);
   }
 
   register(config);

@@ -45,7 +45,7 @@ export default function Unifire (config) {
     }
   }
 
-  let fire = async (actionName, payload) => {
+  let fire = (actionName, payload) => {
     return ACTIONS[actionName] && ACTIONS[actionName]({ state: STATE, set }, payload);
   }
 
