@@ -47,7 +47,9 @@ export default function Unifire (config) {
     timeout = setTimeout(() => {
       const uniqueSubscribers = new Set();
       for (const prop in PENDING_DELTA) {
-        SUBSCRIPTIONS[prop] && SUBSCRIPTIONS[prop].forEach((sub) => uniqueSubscribers.add(sub));
+        PENDING_DELTA[prop] !== prior[prop]
+        && SUBSCRIPTIONS[prop]
+        && SUBSCRIPTIONS[prop].forEach((sub) => uniqueSubscribers.add(sub));
       }
       uniqueSubscribers.forEach((sub) => sub(STATE, prior));
       PENDING_DELTA = {};

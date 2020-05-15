@@ -11,7 +11,8 @@
   },
   "scripts": {
     "build": "microbundle",
-    "test": "npm run build && jest --watchAll"
+    "test": "npm run build && jest --coverage",
+    "test:watch": "npm run build && jest --watchAll"
   },
   "babel": {
     "presets": [

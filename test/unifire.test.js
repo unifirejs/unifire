@@ -106,16 +106,16 @@ describe('Unifire', () => {
 			const spy = jest.fn();
 			store.subscribe([ 'name', 'loading' ], spy);
 			await tick();
-			expect(spy).toHaveBeenCalledTimes(1);
+			expect(spy).toHaveBeenCalledTimes(0);
 			store.state.count++;
 			await tick();
-			expect(spy).toHaveBeenCalledTimes(1);
+			expect(spy).toHaveBeenCalledTimes(0);
 			store.state.name = 'jophus';
 			await tick();
-			expect(spy).toHaveBeenCalledTimes(2);
+			expect(spy).toHaveBeenCalledTimes(1);
 			store.state.loading = true;
 			await tick();
-			expect(spy).toHaveBeenCalledTimes(3);
+			expect(spy).toHaveBeenCalledTimes(2);
 		});
 
 		it('should execute subscriber function immediately', () => {
@@ -156,7 +156,16 @@ describe('Unifire', () => {
 			expect(spy).toHaveBeenCalledTimes(2);
 		});
 
-		it('should only run subscriber once for immediate, sequential mutations', async () => {
+		it('should not run subscriber when immediate, sequential mutations that no changes', async () => {
+			const spy = jest.fn();
+			store.subscribe(({ count }, prior) => spy(count, prior.count));
+			store.state.count++;
+			store.state.count--;
+			await tick();
+			expect(spy).toHaveBeenCalledTimes(1);
+		});
+
+		it('should only run subscriber once for immediate, sequential mutations that yield changes', async () => {
 			const spy = jest.fn();
 			store.subscribe(({ count }, prior) => spy(count, prior.count));
 			store.state.count++;
@@ -266,6 +275,10 @@ describe('Unifire', () => {
 	});
 
 	describe('register', () => {
+		it('should not throw', () => {
+			store.register({});
+		});
+
 		it('should register new state and actions', () => {
 			const lazyState = { lazyCount: 0 };
 			const lazyActions = {
