@@ -1,6 +1,5 @@
 export default function Unifire (config) {
   let SUBSCRIPTIONS = {};
-  let LISTENERS = [];
   let ACTIONS = {};
   let DEPS = new Set();
   let BARE_STATE = {};
@@ -15,18 +14,21 @@ export default function Unifire (config) {
   let deref = (obj, target = {}) => Object.assign(target, obj);
 
   let subscribe = (cb, override) => {
-    DEPS.clear();
-    cb(new Proxy({}, {
-      get (_, prop) {
-        DEPS.add(prop);
-        return STATE[prop];
-      }
-    }), {});
+    // This is slightly smaller than Array.isArray
+    if (cb instanceof Array) {
+      DEPS = new Set(cb);
+    } else {
+      DEPS.clear();
+      cb(new Proxy({}, {
+        get (_, prop) {
+          DEPS.add(prop);
+          return STATE[prop];
+        }
+      }), {});
+    }
     DEPS.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].add(override || cb));
     return () => DEPS.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].delete(override || cb));
   }
-
-  let listen = (cb) => LISTENERS.push(cb);
 
   let set = (delta) => {
     let changedProps = Object.keys(delta).filter((prop) => {
@@ -40,7 +42,6 @@ export default function Unifire (config) {
       let prior = deref(STATE);
       deref(delta, BARE_STATE);
       uniqueSubscribers.forEach((sub) => sub(STATE, prior));
-      LISTENERS.forEach((cb) => cb(STATE, prior));
     }
   }
 
@@ -61,5 +62,5 @@ export default function Unifire (config) {
 
   register(config);
 
-  return { state: STATE, subscribe, listen, fire, set, register };
+  return { state: STATE, subscribe, fire, set, register };
 }

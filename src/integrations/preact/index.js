@@ -5,9 +5,13 @@ const StoreContext = createContext();
 
 export const Provider = StoreContext.Provider;
 
-export function Observer (component) {
+export function Observer (store, component) {
+  if (arguments.length === 1) {
+    component = store;
+    // Disabling eslint on this line because optionally passing a store should be constant
+    store = useContext(StoreContext); // eslint-disable-line react-hooks/rules-of-hooks
+  }
   function Wrapper() {
-    const store = useContext(StoreContext);
     let unsubscribe;
     this.componentDidMount = () => {
       unsubscribe = store.subscribe(component, () => this.setState({}));
