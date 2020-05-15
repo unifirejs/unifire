@@ -1,4 +1,4 @@
-function Unifire (config) {
+export default function Unifire (config) {
   const SUBSCRIPTIONS = {};
   const ACTIONS = {};
   const BARE_STATE = {};
@@ -42,7 +42,7 @@ function Unifire (config) {
   }
 
   const callUniqueSubscribers = () => {
-    // Inlining the debounce function saves a lot of bytes
+    // Inlining the debounce function is smaller
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       const uniqueSubscribers = new Set();
