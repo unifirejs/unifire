@@ -3,35 +3,42 @@
 
 [![Build Status](https://travis-ci.org/jpodwys/unifire.svg?branch=master)](https://travis-ci.org/jpodwys/unifire)
 [![codecov](https://codecov.io/gh/jpodwys/unifire/branch/master/graph/badge.svg)](https://codecov.io/gh/jpodwys/unifire)
-# Docs are current a WIP
+
+## These docs are currently a work in progress
 
 # Table of Contents
-Features
-Guide
-Counter App
-Todo App
-Integrations
-API
+* Features
+* Guide
+* Counter App
+* Todo App
+* Integrations
+* API
 
-# Features
+## Features
 
-## Tiny
-400 (brotli-compressed) bytes. No dependencies.
+__Tiny__ 400 (brotli-compressed) bytes. No dependencies.
 
-## Simple
-Everything you need is right here in one package. Including the constructor, Unifire has four public methods and one public property.
+__Simple__ Including the constructor, Unifire has four public methods and one public property.
 
-## Flexibility
-From single-store global state management all the way to a per-model multi-store setup, Unifire's got you covered.
+__Flexibile__ From single-store global state management all the way to a per-model multi-store setup, Unifire's got you covered.
 
-## TypeScript support
-The types are strong with this one. (This is my first go at making a `d.ts` file, so contributions are appreciated.)
+__TypeScript support__ The types are strong with this one. (This is my first time making a `d.ts` file, so contributions are appreciated.)
 
-## Efficient
-Unifire only calls a subscriber when one of its dependencies changes.
+__Efficient__ Unifire only calls a subscriber when one of its dependencies changes. If multiple dependencies change, it still only calls each applicable subscriber once.
 
-## Derived state
-Also referred to as "computed properties," Unifire allows you to subscribe directly to store-level derivations. Check out how simple Unifire's computed properties are:
+__Derived state__ Also referred to as "computed properties," Unifire allows you to subscribe directly to store-level derivations.
+
+__Sync and Async actions--in one__ Unifire doesn't care what your actions do--combine sync, async, even setTimeout calls into a single action--Unifire will call the right subscribers at the right time.
+
+__Batched updates__ Immediate, sequential updates get batched so that subscribers get called only when necessary.
+
+__Composable actions__ Call actions from other actions. Or don't.
+
+__Subscribe to properties not commits__ Unifire allows you to subscribe to one or more properties directly.
+
+__Register store modules at runtime__ Code-splitting is a first-class concern. Keep your state and actions where they belong and load them only when you need them.
+
+
 
 ```js
 const state = {
@@ -43,6 +50,12 @@ const state = {
 Done! No we have `doubled`, a computed property, to which we can subscribe. Any time `count` changes, Unifire will call all of `doubled`'s subscribers.
 
 And, since you're wondering, yes you can have computed properties that depend on computed properties like-a-so:
+
+
+
+
+
+
 
 ```js
 const state = {
@@ -79,11 +92,3 @@ const showToast = ({ state }, message) => {
   setTimeout(() => state.toast = '', 5000);
 }
 ```
-
-## Composable actions
-
-## Subscribe to properties not commits
-
-## Register store modules at runtime for code splitting
-
-##
