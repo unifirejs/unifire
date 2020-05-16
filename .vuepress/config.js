@@ -1,5 +1,6 @@
 module.exports = {
   themeConfig: {
+    base: '/unifire/',
     plugins: [ 'vuepress-plugin-smooth-scroll' ],
     nav: [
       { text: 'Home', link: '/' },
