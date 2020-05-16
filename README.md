@@ -3,8 +3,7 @@
 
 [![Build Status](https://travis-ci.org/jpodwys/unifire.svg?branch=master)](https://travis-ci.org/jpodwys/unifire)
 [![codecov](https://codecov.io/gh/jpodwys/unifire/branch/master/graph/badge.svg)](https://codecov.io/gh/jpodwys/unifire)
-[![Coverage](https://codecov.io/gh/jpodwys/unifire/branch/master/graph/badge.svg)](https://codecov.io/gh/jpodwys/unifire)
-[![Coveralls](https://img.shields.io/coveralls/jekyll/jekyll.svg?style=flat)]()
+[![code coverage](https://codecov.io/gh/jpodwys/unifire/branch/master/graph/badge.svg)](https://codecov.io/gh/jpodwys/unifire)
 
 # Docs are current a WIP
 
