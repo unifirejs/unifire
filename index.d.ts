@@ -1,10 +1,11 @@
 export type State = object;
-export type Fire = (string: actionName, payload?: any) => any;
+export type Fire = (actionName: string, payload?: any) => any;
 export type Subscriber = (state: State, previous: State) => any;
 export type Unsubscriber = () => void;
 
 export interface UnifireConfig {
   state: State;
+  // This needs to be an object of functions but it's currently just a function
   actions: ({ state: State, fire: Fire }, payload?: any) => any;
 }
 
