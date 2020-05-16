@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build": "microbundle",
+    "docs:build": "vuepress build docs",
     "test": "npm run build && jest --coverage",
     "test:watch": "npm run build && jest --watchAll"
   },
