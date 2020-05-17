@@ -14,6 +14,6 @@ git add -A
 git commit -m 'deploy'
 
 # if you are deploying to https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:jpodwys/unifire.git master:gh-pages
+git push -f https://github.com/jpodwys/unifire master:gh-pages
 
 cd -
