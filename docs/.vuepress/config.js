@@ -1,10 +1,10 @@
 module.exports = {
   themeConfig: {
     base: '/unifire/',
+    logo: '/unifire-logo.png',
     plugins: [ 'vuepress-plugin-smooth-scroll' ],
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Preact', link: '/preact' },
       { text: 'Github', link: 'https://github.com/jpodwys/unifire' }
     ],
     sidebar: [
@@ -23,7 +23,8 @@ module.exports = {
           '/core/state/',
           '/core/derived/',
           '/core/actions/',
-          '/core/subscribers/'
+          '/core/subscribers/',
+          '/core/lazy/'
         ]
       },
       {

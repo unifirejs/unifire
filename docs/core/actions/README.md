@@ -4,6 +4,8 @@ Unifire has no limitations on what you can do in your actions. Write your code h
 
 ## Basics
 
+Let's create a store called `counter` with actions to `increment` and `decrement` our state.
+
 ```js
 const state = { count: 0 };
 
