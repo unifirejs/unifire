@@ -16,11 +16,11 @@ const counterStore = Unifire({
 export const Counter = () => {
   const [ count, setCount ] = useUnifireState(counterStore, 'count');
   return (
-    <>
+    <div>
       <button onClick={() => setCount(count - 1)}>-</button>
       <span>{count}</span>
       <button onClick={() => setCount(count + 1)}>+</button>
-    </>
+    </div>
   );
 };
 ```

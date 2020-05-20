@@ -4,7 +4,7 @@ Derived state, also called computed properties, are values that depend on other 
 
 ```js
 const state = {
-  count: 0,
+  count: 1,
   doubled: ({ count }) => count * 2
 };
 
@@ -28,5 +28,9 @@ const state = {
   quadrupled: ({ doubled }) => doubled * 2
 }
 ```
+
+*******************************************
+Something about memoizing derived state. Possibly add a memoize export specific to derivation functions.
+*******************************************
 
 Unifire does not support making assignments to derived state.

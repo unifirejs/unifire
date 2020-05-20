@@ -1,6 +1,6 @@
 module.exports = {
-  base: '/unifire/',
   themeConfig: {
+    base: '/unifire/',
     logo: '/unifire-logo.png',
     plugins: [ 'vuepress-plugin-smooth-scroll' ],
     nav: [
@@ -12,7 +12,7 @@ module.exports = {
         title: 'Intro',
         collapsable: false,
         children: [
-          '/intro/quick-start/',
+          [ '/', 'What\'s Unifire?' ],
           '/intro/installation/'
         ]
       },
@@ -24,7 +24,8 @@ module.exports = {
           '/core/derived/',
           '/core/actions/',
           '/core/subscribers/',
-          '/core/lazy/'
+          '/core/lazy/',
+          '/core/composition/'
         ]
       },
       {
@@ -39,7 +40,8 @@ module.exports = {
         title: 'Integrations',
         collapsable: false,
         children: [
-          [ '/integrations/preact/', 'Preact' ]
+          [ '/integrations/preact/', 'Preact' ],
+          [ '/integrations/react/', 'React' ]
         ]
       },
       '/api/'

@@ -1,4 +1,4 @@
-export default function Unifire (modules) {
+export default function Unifire (module) {
   const SUBSCRIPTIONS = {};
   const ACTIONS = {};
   const BARE_STATE = {};
@@ -61,28 +61,41 @@ export default function Unifire (modules) {
     return ACTIONS[actionName] && ACTIONS[actionName]({ state: STATE, fire }, payload);
   }
 
-  /**
-   * This version of Unifire allows passing an array of store modules
-   * and alows each of them to provide an array of subscribers.
-   * This ultimtely allows a plugin architecture.
-   */
-  const register = (modules) => {
-    if (!(modules instanceof Array)) modules = [ modules ];
-    for (const { state, actions, subscribers } in modules) {
-      for (const prop in state) SUBSCRIPTIONS[prop] = new Set();
-      deref(actions, ACTIONS);
-      deref(state, STATE);
-      prior = deref(STATE);
-      for (const prop in state) {
-        if (isFunc(state[prop])) {
-          subscribe(state[prop], () => SUBSCRIPTIONS[prop].forEach((sub) => sub(STATE, prior)));
-        }
+  const register = ({ state = {}, actions = {}, subscribers = [] }) => {
+    for (const prop in state) SUBSCRIPTIONS[prop] = new Set();
+    deref(actions, ACTIONS);
+    deref(state, STATE);
+    prior = deref(STATE);
+    for (const prop in state) {
+      if (isFunc(state[prop])) {
+        subscribe(state[prop], () => SUBSCRIPTIONS[prop].forEach((sub) => sub(STATE, prior)));
       }
-      for (const sub of subscribers) subscribe(sub);
+    }
+    for (const sub of subscribers) {
+      if (isFunc(sub)) subscribe(sub);
+      else subscribe(sub[0], sub[1]);
     }
   }
 
-  register(modules);
+  register(module);
 
   return { state: STATE, fire, subscribe, register };
 }
+
+const unifireLocalStorage = (config) => {
+  const state = {};
+  const subscribers = [];
+  for (const prop in config) {
+    state[prop] = JSON.parse(localStorage.getItem(prop)) || config[prop];
+    subscribers.push([
+      [ prop ],
+      (state) => localStorage.setItem(prop, JSON.stringify(state[prop]))
+    ]);
+  }
+  return { state, subscribers };
+};
+
+const localStorageModule = unifireLocalStorage({
+  dark: false,
+  timestamp: undefined
+});

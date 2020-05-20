@@ -18,6 +18,10 @@ You can also be more explicit and instruct Unifire exactly which properties to l
 store.subscribe([ 'a', 'b' ], (state) => { ... });
 ```
 
+> There's an important difference between passing just a function and passing an array and a function. When you pass just a function, Unifire immediately runs your subscriber in order to determine its dependencies. When you pass an array of dependencies, Unifire does not immediately run your subscriber.
+
+> Also, when using function-only notation, be aware that there cannot be any conditional state property access. In order for Unifire to detect what dependencies a subscriber has, that subscriber must access all of its dependencies unconditionally.
+
 Subscribers also receive the prior state object.
 
 ```js

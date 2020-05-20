@@ -1,6 +1,6 @@
 # Todos
 
-In the Counter example, we wrote our store and compoennt in the same file. Let's put our store and component in separate files for this demo.
+In the Counter example, we wrote our store and component in the same file. Let's put our store and component in separate files for this demo.
 
 Let's start with the todos store.
 
@@ -34,8 +34,7 @@ Now we'll write our component. __NOTE__ that this example assumes we're using `u
 
 import { h } from 'preact';
 import { useState } from 'preact/hooks';
-import style from './style';
-import { Observer } from '../../js/unifire/preact';
+import { Observer } from 'unifire-preact';
 
 const Todos = ({ todos, fire }) => {
   const [ name, setName ] = useState('');
@@ -47,21 +46,21 @@ const Todos = ({ todos, fire }) => {
   }
 
   return (
-    <>
-      <form onSubmit={(e) => onSubmit(e)}>
-        <input onInput={(e) => setName(e.target.value)} />
+    <div>
+      <form onSubmit={onSubmit}>
+        <input value={name} onInput={(e) => setName(e.target.value)} />
       </form>
 
       <ul>
         { todos.map((item) => (
           <li>
             <button onClick={() => fire('toggleTodo', item.id)}>Toggle</button>
-            <span class={item.done ? style.done : ''}>{item.name}</span>
+            <span class={item.done ? 'done' : ''}>{item.name}</span>
             <button onClick={() => fire('removeTodo', item.id)}>X</button>
           </li>
         )) }
       </ul>
-    </>
+    </div>
   );
 }
 

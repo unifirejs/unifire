@@ -1,10 +1,10 @@
 # Actions
 
-Unifire has no limitations on what you can do in your actions. Write your code however you want to write it. Unifire will call the right subscribers at the right time.
+Unifire has no limitations on what you can do in your actions. Write your code however you want to write it. Unifire will call the right subscribers at the right time, batched as efficiently as possible.
 
 ## Basics
 
-Let's create a store called `counter` with actions to `increment` and `decrement` our state.
+Let's create a store called `counter` with actions to `increment` and `decrement` count.
 
 ```js
 const state = { count: 0 };
@@ -72,7 +72,7 @@ const actions = {
   }
 };
 
-store.fire('showToast');
+store.fire('showToast', 'Some Notification');
 ```
 
 ## Composing Actions
