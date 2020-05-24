@@ -28,14 +28,14 @@ module.exports = {
           '/core/composition/'
         ]
       },
-      {
-        title: 'Demos',
-        collapsable: false,
-        children: [
-          '/demos/counter/',
-          '/demos/todos/'
-        ]
-      },
+      // {
+      //   title: 'Demos',
+      //   collapsable: false,
+      //   children: [
+      //     '/demos/counter/',
+      //     '/demos/todos/'
+      //   ]
+      // },
       {
         title: 'Integrations',
         collapsable: false,

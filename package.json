@@ -1,7 +1,7 @@
 {
   "name": "unifire",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "A state management solution that's tiny, efficient, capable, and easy.",
   "source": "index.js",
   "module": "dist/unifire.es.js",
   "main": "dist/unifire.js",

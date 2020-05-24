@@ -43,7 +43,7 @@ The `Observer` HOC accepts either a function or a class component.
 
 You can use it with a function component as follows:
 
-```js
+```js{2,12}
 import { h } from 'preact';
 import { Observer } from 'unifire-preact';
 
@@ -91,7 +91,7 @@ export default Observer(CounterClass);
 
 If you wish to use a multi-store setup, you can overload `Observer` by passing a Unifire instance as the first argument. Even if your app has a global store registered via the `Provider` HOC, passing a store instance to `Observer` will cause this component to bind to the passed store rather than the global store.
 
-```js
+```js{2,13}
 import { h } from 'preact';
 import { counterStore } from '../path/to/my/store';
 import { Observer } from 'unifire-preact';
@@ -111,7 +111,7 @@ export default Observer(counterStore, Counter);
 
 The `useUnifireState` hook is very similar to Preact's own `useState` hook. Let's write the same `Counter` component we wrote above using `useUnifireState` instead of `Observer`.
 
-```js
+```js{5,8-10}
 import { h } from 'preact';
 import { useUnifireState } from 'unifire-preact';
 
@@ -156,7 +156,7 @@ export default Counter;
 
 Where `useUnifireState` allows you to access a single state property per call and does not expose `fire`, `useUnifire` allows you to access multiple state properties and exposes `fire` all in one line of code.
 
-```js
+```js{5,8-11}
 import { h } from 'preact';
 import { useUnifire } from 'unifire-preact';
 
