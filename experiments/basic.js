@@ -1,4 +1,4 @@
-export const Unifire = (config) => {
+export default function Unifire (config) {
   const SUBSCRIPTIONS = {};
   const ACTIONS = {};
   const DEPS = new Set();
@@ -27,14 +27,12 @@ export const Unifire = (config) => {
         return STATE[prop];
       }
     }), {});
-    DEPS.forEach((dep) => SUBSCRIPTIONS[dep]?.add(override || cb));
-    return () => DEPS.forEach((dep) => SUBSCRIPTIONS[dep]?.delete(override || cb));
+    DEPS.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].add(override || cb));
+    return () => DEPS.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].delete(override || cb));
   }
 
   const fire = (actionName, payload) => {
-    return ACTIONS[actionName]
-      ? ACTIONS[actionName]({ state: STATE, fire }, payload)
-      : undefined;
+    return ACTIONS[actionName] && ACTIONS[actionName]({ state: STATE, fire }, payload);
   }
 
   const register = ({ state = {}, actions = {} }) => {

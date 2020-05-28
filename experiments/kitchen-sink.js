@@ -4,17 +4,18 @@
  * 2. listen is now available as a public method and a param to register
  */
 
+import { reflect } from '../utils';
+
 export default function Unifire (config) {
-  const SUBSCRIPTIONS = {};
-  const ACTIONS = {};
-  const BARE_STATE = {};
-  const LISTENERS = [];
-  let DEPS = new Set();
+  let SUBSCRIPTIONS = {};
+  let ACTIONS = {};
+  let BARE_STATE = {};
+  let LISTENERS = [];
   let PENDING_DELTA = {};
   let prior;
   let timeout;
 
-  const STATE = new Proxy(BARE_STATE, {
+  let STATE = new Proxy(BARE_STATE, {
     get (state, prop) {
       return isFunc(state[prop]) ? state[prop](STATE) : state[prop]
     },
@@ -27,56 +28,44 @@ export default function Unifire (config) {
     }
   });
 
-  const isFunc = (val) => val instanceof Function;
+  let isFunc = (val) => val instanceof Function;
 
-  const deref = (obj, target = {}) => Object.assign(target, obj);
+  let deref = (obj, target = {}) => Object.assign(target, obj);
 
-  const subscribe = (cb, override) => {
-    // This is slightly smaller than Array.isArray
-    if (cb instanceof Array) {
-      DEPS = new Set(cb);
-    } else {
-      DEPS.clear();
-      cb(new Proxy({}, {
-        get (_, prop) {
-          DEPS.add(prop);
-          return STATE[prop];
-        }
-      }), {});
-    }
-    DEPS.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].add(override || cb));
-    return () => DEPS.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].delete(override || cb));
+  let subscribe = (cb, override) => {
+    let deps = cb instanceof Array ? cb : reflect(STATE, cb)[0];
+    deps.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].add(override || cb));
+    return () => deps.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].delete(override || cb));
   }
 
-  const listen = (cb) => LISTENERS.push(cb);
+  let listen = (cb) => LISTENERS.push(cb);
 
-  const callUniqueSubscribers = () => {
-    // Inlining the debounce function is smaller
+  let callUniqueSubscribers = () => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
-      const uniqueSubscribers = new Set();
-      for (const prop in PENDING_DELTA) {
+      let uniqueSubscribers = new Set();
+      for (let prop in PENDING_DELTA) {
         PENDING_DELTA[prop] !== prior[prop]
         && SUBSCRIPTIONS[prop]
         && SUBSCRIPTIONS[prop].forEach((sub) => uniqueSubscribers.add(sub));
       }
-      const list = new Set(uniqueSubscribers, LISTENERS);
+      let list = new Set(uniqueSubscribers, LISTENERS);
       list.forEach((sub) => sub(STATE, prior));
       PENDING_DELTA = {};
       prior = deref(STATE);
     });
   }
 
-  const fire = (actionName, payload) => {
+  let fire = (actionName, payload) => {
     return ACTIONS[actionName] && ACTIONS[actionName]({ state: STATE, fire }, payload);
   }
 
-  const register = ({ state = {}, actions = {}, subscribers = [], listeners = [] }) => {
-    for (const prop in state) SUBSCRIPTIONS[prop] = new Set();
+  let register = ({ state = {}, actions = {}, subscribers = [], listeners = [] }) => {
+    for (let prop in state) SUBSCRIPTIONS[prop] = new Set();
     deref(actions, ACTIONS);
     deref(state, STATE);
     prior = deref(STATE);
-    for (const prop in state) {
+    for (let prop in state) {
       if (isFunc(state[prop])) {
         subscribe(state[prop], () => SUBSCRIPTIONS[prop].forEach((sub) => sub(STATE, prior)));
       }

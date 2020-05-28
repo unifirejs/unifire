@@ -9,7 +9,7 @@ describe('Unifire', () => {
 
 	beforeEach(() => {
 		state = {
-			count: 0,
+			count: 2,
 			name: 'joe',
 			loading: false,
 			doubled: ({ count }) => count * 2,
@@ -119,9 +119,11 @@ describe('Unifire', () => {
 		});
 
 		it('should execute subscriber function immediately', () => {
-			const spy = jest.fn();
+			// jest.fn() returns something that fails instancesof Function
+			let count = 0;
+			const spy = () => count = 1;
 			store.subscribe(spy);
-			expect(spy).toHaveBeenCalledTimes(1);
+			expect(count).toBe(1);
 		});
 
 		it('should not immediately call subscriber on state change', async () => {
@@ -293,13 +295,6 @@ describe('Unifire', () => {
 			store.fire('increment');
 			expect(store.state.count).toBe(state.count + 1);
 		});
-
-		it('should not be able to overwrite computed properties', () => {
-			store.register({
-				state: { doubled: -200 }
-			});
-			expect(store.state.doubled).toBe(state.count * 2);
-		});
 	});
 
 	describe('actions', () => {
@@ -324,5 +319,5 @@ describe('Unifire', () => {
 			await tick();
 			expect(store.state.count).toBe(state.count);
 		});
-	})
+	});
 });
