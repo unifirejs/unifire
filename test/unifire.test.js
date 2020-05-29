@@ -46,6 +46,7 @@ describe('Unifire', () => {
     expect(store).toMatchObject({
 			state: expect.any(Object),
 			subscribe: expect.any(Function),
+			listen: expect.any(Function),
 			fire: expect.any(Function),
 			register: expect.any(Function)
 		});
@@ -273,6 +274,25 @@ describe('Unifire', () => {
 			const [ count, priorCount ] = overrideSpy.mock.calls[0];
 			expect(count).toBe(state.count + 1);
 			expect(priorCount).toBe(state.count);
+		});
+	});
+
+	describe('listen', () => {
+		it('should accept and call listener on every state change', async () => {
+			const spy = jest.fn();
+			store.listen(spy);
+
+			store.state.count++;
+			await tick();
+			let [ state, prior ] = spy.mock.calls[0];
+			expect(state.count).toBe(store.state.count);
+			expect(prior.count).toBe(store.state.count - 1);
+
+			store.state.name = 'yo';
+			await tick();
+			[ state, prior ] = spy.mock.calls[1];
+			expect(state.name).toBe('yo');
+			expect(prior.name).toBe('joe');
 		});
 	});
 

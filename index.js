@@ -9,22 +9,36 @@ export default function Unifire (config) {
   let prior;
   let timeout;
 
-  let STATE = new Proxy(BARE_STATE, {
-    get (state, prop) {
-      return isFunc(state[prop]) ? state[prop](STATE) : state[prop]
-    },
-    set (state, prop, next) {
-      if (!isFunc(state[prop])) {
-        state[prop] = PENDING_DELTA[prop] = next;
-        callUniqueSubscribers();
-      }
-      return true;
-    }
-  });
+  let get = (state, prop, proxy) => isFunc(state[prop]) ? state[prop](proxy) : state[prop];
+
+  let setPrior = () =>  prior = new Proxy(deref(BARE_STATE), { get });
 
   let isFunc = (val) => val instanceof Function;
 
   let deref = (obj, target = {}) => Object.assign(target, obj);
+
+  let STATE = new Proxy(BARE_STATE, {
+    get,
+    set (state, prop, next) {
+      if (!isFunc(state[prop])) {
+        state[prop] = PENDING_DELTA[prop] = next;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          let uniqueSubscribers = new Set();
+          for (let prop in PENDING_DELTA) {
+            PENDING_DELTA[prop] !== prior[prop]
+            && SUBSCRIPTIONS[prop]
+            && SUBSCRIPTIONS[prop].forEach((sub) => uniqueSubscribers.add(sub));
+          }
+          uniqueSubscribers.forEach((sub) => sub(STATE, prior));
+          LISTENERS.forEach((cb) => cb(STATE, prior));
+          PENDING_DELTA = {};
+          setPrior();
+        });
+      }
+      return true;
+    }
+  });
 
   let subscribe = (deps, cb) => {
     let props = deps;
@@ -35,7 +49,7 @@ export default function Unifire (config) {
           props.add(prop);
           return STATE[prop];
         }
-      }), {});
+      }), prior);
     }
     // let props = isFunc(deps) ? reflect(STATE, deps)[0] : deps;
     props.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].add(cb || deps));
@@ -43,22 +57,6 @@ export default function Unifire (config) {
   }
 
   let listen = (cb) => LISTENERS.push(cb);
-
-  let callUniqueSubscribers = () => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      let uniqueSubscribers = new Set();
-      for (let prop in PENDING_DELTA) {
-        PENDING_DELTA[prop] !== prior[prop]
-        && SUBSCRIPTIONS[prop]
-        && SUBSCRIPTIONS[prop].forEach((sub) => uniqueSubscribers.add(sub));
-      }
-      uniqueSubscribers.forEach((sub) => sub(STATE, prior));
-      LISTENERS.forEach((cb) => cb(STATE, prior));
-      PENDING_DELTA = {};
-      prior = deref(STATE);
-    });
-  }
 
   let fire = (actionName, payload) => {
     return ACTIONS[actionName] && ACTIONS[actionName]({ state: STATE, fire }, payload);
@@ -68,7 +66,7 @@ export default function Unifire (config) {
     for (let prop in state) SUBSCRIPTIONS[prop] = new Set();
     deref(actions, ACTIONS);
     deref(state, BARE_STATE);
-    prior = deref(STATE);
+    setPrior();
     for (let prop in state) {
       if (isFunc(state[prop])) {
         subscribe(state[prop], () => SUBSCRIPTIONS[prop].forEach((sub) => sub(STATE, prior)));
