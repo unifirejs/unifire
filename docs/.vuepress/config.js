@@ -24,6 +24,7 @@ module.exports = {
           '/core/derived/',
           '/core/actions/',
           '/core/subscribers/',
+          '/core/listeners/',
           '/core/lazy/',
           '/core/composition/'
         ]
@@ -42,6 +43,14 @@ module.exports = {
         children: [
           [ '/integrations/preact/', 'Preact' ],
           [ '/integrations/react/', 'React' ]
+        ]
+      },
+      {
+        title: 'Extensions',
+        collapsable: false,
+        children: [
+          [ '/extensions/indexedDB/', 'indexedDB' ],
+          [ '/extensions/storage/', 'Browser Storage' ]
         ]
       },
       '/api/'

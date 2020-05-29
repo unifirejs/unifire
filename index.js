@@ -78,19 +78,3 @@ export default function Unifire (config) {
 
   return { state: STATE, fire, subscribe, listen, register };
 }
-
-// const unifireLocalStorage = (store, config) => {
-//   const state = {};
-//   const subscribers = [];
-//   for (const prop in config) {
-//     state[prop] = JSON.parse(localStorage.getItem(prop)) || config[prop];
-//     subscribers.push((state) => localStorage.setItem(prop, JSON.stringify(state[prop])));
-//   }
-//   store.register({ state });
-//   subscribers.forEach((sub) => store.subscribe(sub));
-// };
-
-// unifireLocalStorage(store, {
-//   dark: false,
-//   timestamp: undefined
-// });

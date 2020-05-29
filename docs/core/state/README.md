@@ -3,9 +3,7 @@
 Each Unifire instance accepts `state` which must be an object.
 
 ```js
-const state = {
-  count: 0
-};
+const state = { count: 0 };
 
 const counter = Unifire({ state });
 ```
@@ -32,20 +30,20 @@ counter.subscribe(({ count }) => console.log('count', count));
 
 This subscriber will only be called when `counter.state.count` changes. (For more on subscribers, see the Subscribers section.)
 
+### Working with non-primitives
+
 When making assignments to non-primitives such as objects or arrays, be certain to change the value's memory address or the mutation will not trigger subscribers.
 
 ```js
-// Setup our store with an object and an array
+// Setup our store with an object
 const state = {
-  obj: { a: 'a', b: 'b' },
-  arr: [ 1, 2 ]
+  obj: { a: 'a' }
 };
-
 const counter = Unifire({ state });
 
-// Mutate the object
-store.state.obj = { ...state.obj, { c: 'c' } };
+// Will trigger subscribers
+store.state.obj = { a: 'b' };
 
-// Mutate the array
-store.state.arr = [ ...state.arr, ...[ 3 ] ];
+// Will NOT trigger subscribers
+store.state.obj.a = 'b';
 ```

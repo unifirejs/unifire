@@ -1,16 +1,22 @@
 # Subscribers
 
-Subscribers allow you to discover when specific state properties change. The subscribe method's signature is flexible allowing either of the following uses.
+Subscribers allow you to execute a callback when specific state properties change. `store.subscribe` accepts the configurations detailed below. In all cases, the `subscriber` method passed to `store.subscribe` has the following signature:
 
->Unifire.subscribe(subscriber);
->
->Unifire.subscribe(props, subscriber);
+```js
+const subscriber = (state, prior) => { ... };
+```
 
-In the following scenario, Unifire will determine which state properties the provided subscriber method needs and only call that method when one or more of those properties changes.
+### store.subscribe(subscriber);
 
 ```js
 store.subscribe(({ a, b }) => { ... });
 ```
+
+When passed only a subscriber, Unifire will immediately call your subscriber method in order to determine its dependencies (in this case, `a` and `b`). After that, Unifire will only call your subscriber when its state dependencies change.
+
+> When using function-only notation, be aware that there cannot be any conditional state property access. In order for Unifire to detect what dependencies a subscriber has, that subscriber must access all of its dependencies unconditionally. For this reason, it's best to destructure your subscriber's `state` argument, as doing so accesses the properties you need.
+
+### store.subscribe(props, subscriber);
 
 You can also be more explicit and instruct Unifire exactly which properties to listen to.
 
@@ -18,15 +24,9 @@ You can also be more explicit and instruct Unifire exactly which properties to l
 store.subscribe([ 'a', 'b' ], (state) => { ... });
 ```
 
-> There's an important difference between passing just a function and passing an array and a function. When you pass just a function, Unifire immediately runs your subscriber in order to determine its dependencies. When you pass an array of dependencies, Unifire does not immediately run your subscriber.
+In this case, Unifire will not immediately execute the provided subscriber method because you've already told Unifire which state properties this subscriber depends on.
 
-> Also, when using function-only notation, be aware that there cannot be any conditional state property access. In order for Unifire to detect what dependencies a subscriber has, that subscriber must access all of its dependencies unconditionally.
-
-Subscribers also receive the prior state object.
-
-```js
-store.subscribe(({ a, b }, prior) => { ... });
-```
+### Unsubscribing
 
 `store.subscribe` returns an unsibscribe method.
 
