@@ -1,6 +1,10 @@
 # Quick Start
 
-Here's a quick taste to get started. Read the next sections to see Unifire's full capabilities.
+Here's a quick taste to get started.
+
+> For more detailed documentation about Unifire, read the [Core Concepts](/core/state/) docs.
+>
+>For information about Unifire's framework integrations, read the [Integrations](/integrations/preact/) docs.
 
 Creating a basic store is easy. Let's build a counter.
 
@@ -62,7 +66,7 @@ To subscribe to changes to specific state properties, call `store.subscribe`.
 store.subscribe(({ count }) => console.log('count', count));
 ```
 
-To subscribe all state changes, call `store.listen`.
+To subscribe to all state changes, call `store.listen`.
 
 ```js
 store.listen((state) => console.log('change', state));

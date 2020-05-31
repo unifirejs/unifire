@@ -20,16 +20,16 @@ Any new library is informed by the greats that came before it. Unifre is no diff
 
 #### Vuex
 
-The Vuex team did an incredible job ensuring that stores written using Vuex are readable. Its API is straightforward and declarative. If you're familiar with Vuex, you'll see it's influences on Unifire's API right away, especially in Unifire's constructor and actions.
+The [Vuex](https://vuex.vuejs.org/) team did an incredible job ensuring that stores written using Vuex are readable. Its API is straightforward and declarative. If you're familiar with Vuex, you'll see it's influences on Unifire's API right away, especially in Unifire's constructor and actions.
 
 #### Mobx
 
-I've always been impressed by Mobx's ability to yield beautiful, simple user-written code. Mobx has mastered the art of abstracting complexity away from the user. You never have to tell Mobx what your dependencies are--it knows. This mentality informed Unifire's `subscribe` method and `unifire-preact`'s `Observer` HOC.
+I've always been impressed by [Mobx](https://mobx.js.org/README.html)'s ability to yield beautiful, simple user-written code. Mobx has mastered the art of abstracting complexity away from the user. You never have to tell Mobx what your dependencies are--it knows. This mentality informed Unifire's `subscribe` method and `unifire-preact`'s `Observer` HOC.
 
 #### Unistore
 
-Jason Miller's work to simplify the path to async actions while preserving a familiar API is awesome. More than anything, though, I benefited from reading Unistore's source code. `unifire-preact`'s `Observer` HOC has a couple of Jason Miller classics in it.
+Jason Miller's work to simplify the path to async actions while preserving a familiar API is awesome. More than anything, though, I benefited from reading [Unistore](https://github.com/developit/unistore)'s source code. `unifire-preact`'s `Observer` HOC has a couple of Jason Miller classics in it.
 
 #### Storeon
 
-You won't find a smaller state management system with more features than Storeon. It's pure wizardry. I referenced Storeon's code regularly as I wrote `unifire-preact`'s hooks.
+You won't find a smaller state management system with more features than [Storeon](https://github.com/storeon/storeon). It's pure wizardry. I referenced Storeon's code regularly as I wrote `unifire-preact`'s hooks.

@@ -6,6 +6,21 @@
   "module": "dist/unifire.es.js",
   "main": "dist/unifire.js",
   "umd:main": "dist/unifire.umd.js",
+  "unpkg": "dist/unifire.umd.js",
+  "exports": {
+    ".": {
+      "browser": "./dist/unifire.modern.js",
+      "umd": "./dist/unifire.umd.js",
+      "import": "./dist/unifire.modern.js",
+      "require": "./dist/unifire.js"
+    },
+    "./utils": {
+      "browser": "./utils/dist/utils.modern.js",
+      "umd": "./utils/dist/utils.umd.js",
+      "import": "./utils/dist/utils.modern.js",
+      "require": "./utils/dist/utils.js"
+    }
+  },
   "directories": {
     "test": "test"
   },
