@@ -32,10 +32,9 @@ console.log(store.state.doubled); // -> 2
 To make a collection of state mutations available at a store level, create actions.
 
 ```js
-const state = { count: 1 };
 const actions = {
-  increment: ({ count }) => count++,
-  decrement: ({ count }) => count--
+  increment: ({ state }) => state.count++,
+  decrement: ({ state }) => state.count--
 };
 const store = Unifire({ state, actions });
 ```
@@ -45,6 +44,16 @@ To execute actions, call `store.fire`.
 ```js
 store.fire('increment');
 console.log(store.state.count); // -> 2
+```
+
+Async actions have never been easier.
+
+```js
+const actions = {
+  fetchCount: async ({ state }) => {
+    state.count = await someAsyncCall();
+  }
+};
 ```
 
 To subscribe to changes to specific state properties, call `store.subscribe`.
