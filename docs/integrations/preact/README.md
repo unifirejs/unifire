@@ -1,20 +1,20 @@
-# unifire-preact
+# @unifirejs/preact
 
 If this is your first time here, please start with the Core Concepts section to get to know Unifire.
 
-The `unifire-preact` NPM package is a first-party repo providing tight, customizable integration with Unifire.
+The `@unifirejs/preact` NPM package is a first-party repo providing tight, customizable integration with Unifire.
 
 
 ## Install
 
 ```
-yarn add unifire-preact
+yarn add @unifirejs/preact
 ```
 
 or
 
 ```
-npm i unifire-preact
+npm i @unifirejs/preact
 ```
 
 ## Provider
@@ -24,7 +24,7 @@ If you intend to use a single-store setup, start by adding `<Provider>` at the r
 ```js
 import { h } from 'preact';
 import { store } from '../path/to/my/store';
-import { Provider } from 'unifire-preact';
+import { Provider } from '@unifirejs/preact';
 
 const App = () => (
   <Provider value={store}>
@@ -35,7 +35,7 @@ const App = () => (
 export default App;
 ```
 
-This will allow `unifire-preact`'s other methods to automatically tap into your app-wide store from any component.
+This will allow `@unifirejs/preact`'s other methods to automatically tap into your app-wide store from any component.
 
 ## Observer
 
@@ -45,7 +45,7 @@ You can use it with a function component as follows:
 
 ```js{2,12}
 import { h } from 'preact';
-import { Observer } from 'unifire-preact';
+import { Observer } from '@unifirejs/preact';
 
 const Counter = ({ count, fire }) => (
   <div>
@@ -72,7 +72,7 @@ Here's the same component written using a class and wrapped with `Observer`:
 
 ```js
 import { h, Component } from 'preact';
-import { Observer } from 'unifire-preact';
+import { Observer } from '@unifirejs/preact';
 
 class CounterClass extends Component {
   render ({ count, fire }) {
@@ -94,7 +94,7 @@ If you wish to use a multi-store setup, you can overload `Observer` by passing a
 ```js{2,13}
 import { h } from 'preact';
 import { counterStore } from '../path/to/my/store';
-import { Observer } from 'unifire-preact';
+import { Observer } from '@unifirejs/preact';
 
 const Counter = ({ count, fire }) => (
   <div>
@@ -113,7 +113,7 @@ The `useUnifireState` hook is very similar to Preact's own `useState` hook. Let'
 
 ```js{5,8-10}
 import { h } from 'preact';
-import { useUnifireState } from 'unifire-preact';
+import { useUnifireState } from '@unifirejs/preact';
 
 const Counter = () => {
   const [ count, setCount ] = useUnifireState('count');
@@ -136,7 +136,7 @@ As with the `Observer` HOC, you can overload `useUnifireState` by providing a Un
 ```js
 import { h } from 'preact';
 import { counterStore } from '../path/to/my/store';
-import { useUnifireState } from 'unifire-preact';
+import { useUnifireState } from '@unifirejs/preact';
 
 const Counter = () => {
   const [ count, setCount ] = useUnifireState(counterStore, 'count');
@@ -158,7 +158,7 @@ Where `useUnifireState` allows you to access a single state property per call an
 
 ```js{5,8-11}
 import { h } from 'preact';
-import { useUnifire } from 'unifire-preact';
+import { useUnifire } from '@unifirejs/preact';
 
 const Counter = () => {
   const [ state, fire ] = useUnifire([ 'count', 'someOtherProp' ]);
@@ -188,7 +188,7 @@ As with the other exports documented, `useUnifire` allows you to optionally pass
 ```js
 import { h } from 'preact';
 import { counterStore } from '../path/to/my/store';
-import { useUnifire } from 'unifire-preact';
+import { useUnifire } from '@unifirejs/preact';
 
 const Counter = () => {
   const [ state, fire ] = useUnifire(counterStore, [ 'count', 'someOtherProp' ]);

@@ -2,7 +2,7 @@
 
 Unifire has no limitations on what you can do in your actions. Write your code however you want to write it. Unifire will call the right subscribers at the right time, batched as efficiently as possible.
 
-## Basics
+### Basics
 
 Let's create a store called `counter` with actions to `increment` and `decrement` count.
 
@@ -25,7 +25,7 @@ counter.fire('increment');
 
 If your action returns a value, `fire` will return that same value.
 
-## Custom Params
+### Custom Params
 
 Actions often require additional context to run. You can provide a custom argument as follows.
 
@@ -37,7 +37,7 @@ const actions = {
 counter.fire('sum', 2);
 ```
 
-## Async Actions
+### Async Actions
 
 Showing a loading state while fetching some data is an extremely common practice. Let's build it!
 
@@ -75,7 +75,7 @@ const actions = {
 store.fire('showToast', 'Some Notification');
 ```
 
-## Composing Actions
+### Composing Actions
 
 Sometimes it can be useful to chain actions together. Unifire makes this easy. Use the `fire` param made available to all actions.
 

@@ -2,7 +2,7 @@
 
 Derived state, also called computed properties, are values that depend on other state properties. Let's continue with our counter store from the State section and add a derived state property that doubles count.
 
-## Use
+### Use
 
 ```js
 const state = {
@@ -31,7 +31,7 @@ const state = {
 
 Unifire does not support making assignments to derived state.
 
-## Memoization
+### Memoization
 
 Derived state methods run every time the property they represent is accessed. For simple computations such as string concatenation or basic arithmetic, this is fine. However, for more expensive computations, you may want to memoize your derivation method. Unifire exports a `memoize` method written specifically for derivations.
 

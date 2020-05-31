@@ -2,8 +2,6 @@
 
 Unifire is a state management solution that's tiny, efficient, capable, and easy.
 
-One of Unifire's primary goals is flexibility. To that end, Unifire and its framework integrations provide explicit support for both single-store global setups and per-component one-off stores. You can even mix and match.
-
 ### Features
 
 * __Tiny__ 400 (brotli-compressed) bytes. No dependencies.
@@ -13,6 +11,7 @@ One of Unifire's primary goals is flexibility. To that end, Unifire and its fram
 * __Unopinionated Actions__ Combine sync and async mutations in a single action. Unifire will call the right subscribers at the right time, batched as efficiently as possible.
 * __Code Splitting__ Register additional store modules at runtime.
 * __Framework-Agnostic__ Unifire works with anything. See the Integrations docs for pre-made framwork integrations.
+* __Flexible__ Unifire and its framework integrations provide explicit support for both single-store global setups and per-component one-off stores.
 * __Extensions__ Unifire is easy to extend. Check out the extensions docs for available modules.
 
 ### Influences

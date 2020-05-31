@@ -5,7 +5,7 @@ module.exports = {
     plugins: [ 'vuepress-plugin-smooth-scroll' ],
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Github', link: 'https://github.com/jpodwys/unifire' }
+      { text: 'Github', link: 'https://github.com/unifirejs/unifire' }
     ],
     sidebar: [
       {
@@ -13,6 +13,7 @@ module.exports = {
         collapsable: false,
         children: [
           [ '/', 'What\'s Unifire?' ],
+          [ '/intro/quick/', 'Quick Start' ],
           '/intro/installation/'
         ]
       },
