@@ -54,14 +54,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jpodwys/unifire.git"
+    "url": "git+https://github.com/unifirejs/unifire.git"
   },
   "author": "jpodwys",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jpodwys/unifire/issues"
+    "url": "https://github.com/unifirejs/unifire/issues"
   },
-  "homepage": "https://github.com/jpodwys/unifire#readme",
+  "homepage": "https://github.com/unifirejs/unifire#readme",
   "devDependencies": {
     "babel-jest": "^26.0.1",
     "babel-plugin-transform-react-jsx": "^6.24.1",
