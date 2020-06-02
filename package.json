@@ -1,32 +1,13 @@
 {
   "name": "unifire",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A state management solution that's tiny, efficient, capable, and easy.",
-  "source": "index.js",
-  "module": "dist/unifire.es.js",
-  "main": "dist/unifire.modern.js",
-  "common": "dist/unifire.js",
-  "umd:main": "dist/unifire.umd.js",
-  "unpkg": "dist/unifire.umd.js",
-  "exports": {
-    ".": {
-      "browser": "./dist/unifire.modern.js",
-      "umd": "./dist/unifire.umd.js",
-      "import": "./dist/unifire.modern.js",
-      "require": "./dist/unifire.js"
-    },
-    "./utils": {
-      "browser": "./utils/dist/utils.modern.js",
-      "umd": "./utils/dist/utils.umd.js",
-      "import": "./utils/dist/utils.modern.js",
-      "require": "./utils/dist/utils.js"
-    }
-  },
+  "source": "dist/unifire.modern.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "microbundle",
+    "build": "microbundle --i index.js",
     "test": "npm run build && jest --coverage",
     "test:watch": "npm run build && jest --watchAll"
   },
