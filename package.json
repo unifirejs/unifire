@@ -1,13 +1,14 @@
 {
   "name": "unifire",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "A state management solution that's tiny, efficient, capable, and easy.",
-  "source": "dist/unifire.modern.js",
+  "main": "dist/unifire.modern.modern.js",
+  "source": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "microbundle --i index.js",
+    "build": "microbundle",
     "test": "npm run build && jest --coverage",
     "test:watch": "npm run build && jest --watchAll"
   },
