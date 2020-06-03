@@ -1,0 +1,10 @@
+{
+  "name": "utils",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Unifire utils",
+  "main": "dist/utils.modern.js",
+  "source": "index.js",
+  "license": "MIT",
+  "types": "index.d.ts"
+}
