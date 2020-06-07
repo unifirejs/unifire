@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "description": "Unifire utils",
-  "main": "dist/utils.modern.js",
+  "main": "dist/utils.js",
+  "module": "dist/utils.module.js",
+  "umd:main": "dist/utils.umd.js",
+  "unpkg": "dist/utils.umd.js",
   "source": "index.js",
   "license": "MIT",
   "types": "index.d.ts"

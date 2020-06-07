@@ -1,17 +1,41 @@
 {
   "name": "unifire",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A state management solution that's tiny, efficient, capable, and easy.",
-  "main": "dist/unifire.modern.js",
+  "main": "dist/unifire.js",
+  "module": "dist/unifire.module.js",
+  "umd:main": "dist/unifire.umd.js",
+  "unpkg": "dist/unifire.umd.js",
   "source": "index.js",
+  "exports": {
+    ".": {
+      "browser": "./dist/unifire.module.js",
+      "umd": "./dist/unifire.umd.js",
+      "import": "./dist/unifire.modern.js",
+      "require": "./dist/unifire.js"
+    },
+    "./utils": {
+      "browser": "./utils/dist/utils.module.js",
+      "umd": "./utils/dist/utils.umd.js",
+      "import": "./utils/dist/utils.modern.js",
+      "require": "./utils/dist/utils.js"
+    },
+    "./devtools": {
+      "browser": "./devtools/dist/devtools.module.js",
+      "umd": "./devtools/dist/devtools.umd.js",
+      "import": "./devtools/dist/devtools.modern.js",
+      "require": "./devtools/dist/devtools.js"
+    }
+  },
   "types": "index.d.ts",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "npm run build:core & npm run build:utils",
+    "build": "npm run build:core & npm run build:utils && npm run build:devtools",
     "build:core": "microbundle -o dist",
     "build:utils": "microbundle --cwd utils -o dist",
+    "build:devtools": "microbundle --cwd devtools -o dist",
     "test": "npm run build && jest --coverage",
     "test:watch": "npm run build && jest --watchAll"
   },

@@ -1,0 +1,13 @@
+{
+  "name": "devtools",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Unifire devtools",
+  "main": "dist/devtools.js",
+  "module": "dist/devtools.module.js",
+  "umd:main": "dist/devtools.umd.js",
+  "unpkg": "dist/devtools.umd.js",
+  "source": "index.js",
+  "license": "MIT",
+  "types": "index.d.ts"
+}
