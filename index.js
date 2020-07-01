@@ -53,7 +53,14 @@ export default function Unifire (config) {
     }
     // let props = isFunc(deps) ? reflect(STATE, deps)[0] : deps;
     props.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].add(cb || deps));
-    return () => props.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].delete(cb || deps));
+    // I may want to be more aggressive here and remove the subscriber form all locations.
+    // The reason for this is that
+    // return () => props.forEach((dep) => SUBSCRIPTIONS[dep] && SUBSCRIPTIONS[dep].delete(cb || deps));
+    return () => {
+      for (const sub in SUBSCRIPTIONS) {
+        sub.delete(cb || deps);
+      }
+    }
   }
 
   let listen = (cb) => LISTENERS.push(cb);
